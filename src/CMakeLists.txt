@@ -41,4 +41,12 @@ find_package(glfw3 REQUIRED)
 target_link_libraries(opengl-odyssey PRIVATE OpenGL::GL glfw)
 
 # Copying Shader Files
-file(COPY shaders/ DESTINATION ${CMAKE_BINARY_DIR}/shaders/)
+# file(COPY shaders/ DESTINATION ${CMAKE_BINARY_DIR}/shaders/)
+
+add_custom_command(
+    TARGET opengl-odyssey POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/shaders
+        ${CMAKE_BINARY_DIR}/shaders
+    COMMENT "Copying shaders directory to build directory"
+)
