@@ -13,8 +13,9 @@ target_include_directories(glad PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_executable(
     opengl-odyssey
     main.cpp
-    libs/WindowManager.cpp
-    libs/Shader.cpp
+    include/stb/stb_image.cpp
+    include/WindowManager/WindowManager.cpp
+    include/Shader/Shader.cpp
     # Shader.cpp
     # Transform.cpp
     # BufferObjectManager.cpp
@@ -24,12 +25,6 @@ add_executable(
 
 # Link Glad
 target_link_libraries(opengl-odyssey PRIVATE glad)
-
-# # Include directories for GLEW
-# target_include_directories(opengl-odyssey PRIVATE /opt/homebrew/Cellar/glew/2.2.0_1/include)
-
-# # Link GLEW library
-# target_link_libraries(opengl-odyssey PRIVATE OpenGL::GL glfw)
 
 # Include directories for GLFW and GLM
 target_include_directories(opengl-odyssey PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -41,12 +36,19 @@ find_package(glfw3 REQUIRED)
 target_link_libraries(opengl-odyssey PRIVATE OpenGL::GL glfw)
 
 # Copying Shader Files
-# file(COPY shaders/ DESTINATION ${CMAKE_BINARY_DIR}/shaders/)
-
 add_custom_command(
     TARGET opengl-odyssey POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/shaders
         ${CMAKE_BINARY_DIR}/shaders
     COMMENT "Copying shaders directory to build directory"
+)
+
+# Copying Resource Files
+add_custom_command(
+    TARGET opengl-odyssey POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/resources
+        ${CMAKE_BINARY_DIR}/resources
+    COMMENT "Copying resources directory to build directory"
 )

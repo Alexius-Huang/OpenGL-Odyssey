@@ -4,7 +4,7 @@
 #include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "../libs/WindowManager.h"
+#include <WindowManager/WindowManager.h>
 
 using std::ifstream;
 using std::stringstream;

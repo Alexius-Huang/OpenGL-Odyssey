@@ -2,8 +2,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <cmath>
-#include "../libs/WindowManager.h"
-#include "../libs/Shader.h"
+#include <WindowManager/WindowManager.h>
+#include <Shader/Shader.h>
 
 using std::cout;
 using std::endl;
