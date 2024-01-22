@@ -11,6 +11,7 @@ using std::endl;
 
 namespace _05_TextureBasics {
     void main();
+    void load_texture(const char* path, GLenum format);
 }
 
 void _05_TextureBasics::main() {
@@ -69,9 +70,10 @@ void _05_TextureBasics::main() {
     };
 
     /* Texture */
-    unsigned int texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    unsigned int texture_1;
+    glGenTextures(1, &texture_1);
+    glActiveTexture(GL_TEXTURE0); // activate texture unit
+    glBindTexture(GL_TEXTURE_2D, texture_1);
 
     // Set texture wrapping/filtering options
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -80,14 +82,83 @@ void _05_TextureBasics::main() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     // Loading texture
+    load_texture("./resources/textures/container.jpg", GL_RGB);
+
+    unsigned int texture_2;
+    glGenTextures(1, &texture_2);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture_2);
+
+    // Set texture wrapping/filtering options
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Loading texture
+    load_texture("./resources/textures/awesomeface.png", GL_RGBA);
+
+    // We need to assign texture to the shader uniform via texture unit
+    shader_program.use();
+    shader_program.set_int("u_texture_1", 0);
+    shader_program.set_int("u_texture_2", 1);
+
+    float* opacity = new float { .5f };
+    manager.listen(GLFW_KEY_UP, [opacity] (WindowManager* context) {
+        *opacity += .01;
+        if (*opacity > 1.) {
+            *opacity = 1.;
+        }
+    });
+    manager.listen(GLFW_KEY_DOWN, [opacity] (WindowManager* context) {
+        *opacity -= .01;
+        if (*opacity < .0) {
+            *opacity = .0;
+        }
+    });
+
+    manager.render([
+        EBO,
+        VAO,
+        shader_program,
+        texture_1,
+        texture_2,
+        opacity
+    ] (WindowManager* context) {
+        glClearColor(.2f, .3f, .3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture_1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture_2);
+
+        shader_program.use();
+        shader_program.set_float("opacity", *opacity);
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    });
+
+    delete opacity;
+    glfwTerminate();
+}
+
+void _05_TextureBasics::load_texture(const char* path, GLenum format) {
+    // Loading texture
     int texture_width, texture_height, nr_channels;
+    stbi_set_flip_vertically_on_load(true);
     unsigned char *data = stbi_load(
-        "./resources/textures/container.jpg",
+        path,
         &texture_width,
         &texture_height,
         &nr_channels,
         0
     );
+
+    if (!data) {
+        cout << "Failed to load texture: " << path << endl;
+        return;
+    }
 
     glTexImage2D(
         /* texture target */                  GL_TEXTURE_2D,
@@ -95,27 +166,10 @@ void _05_TextureBasics::main() {
         /* texture format */                  GL_RGB,
         /* texture dimension */               texture_width, texture_height,
         /* legacy stuff... */                 0,
-        /* format, data type of source img */ GL_RGB, GL_UNSIGNED_BYTE,
+        /* format, data type of source img */ format, GL_UNSIGNED_BYTE,
         /* actual image */                    data
     );
     glGenerateMipmap(GL_TEXTURE_2D);
     // clear the image data after texture being generated
     stbi_image_free(data);
-
-    manager.render([
-        EBO,
-        VAO,
-        shader_program,
-        texture
-    ] (WindowManager* context) {
-        glClearColor(.2f, .3f, .3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glBindTexture(GL_TEXTURE_2D, texture);
-        shader_program.use();
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    });
-
-    glfwTerminate();
 }

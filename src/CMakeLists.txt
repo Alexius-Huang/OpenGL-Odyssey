@@ -16,10 +16,8 @@ add_executable(
     include/stb/stb_image.cpp
     include/WindowManager/WindowManager.cpp
     include/Shader/Shader.cpp
-    # Shader.cpp
+    include/Texture/Texture.cpp
     # Transform.cpp
-    # BufferObjectManager.cpp
-    # EventListener.cpp
     # Camera.cpp
 )
 
