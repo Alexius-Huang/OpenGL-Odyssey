@@ -115,8 +115,14 @@ void _12_LightingMap::main() {
     try { specular_map.load(); }
     catch (TextureFailedToLoadException ex) { cout << ex.what() << endl; }
 
+    // Loading emission map to simulate the object as if itself can glow!
+    Texture emission_map { "./resources/textures/matrix.jpg", GL_RGB, GL_TEXTURE2 };
+    try { emission_map.load(); }
+    catch (TextureFailedToLoadException ex) { cout << ex.what() << endl; }
+
     obj_shader.set_int("u_material.diffuse", 0);
     obj_shader.set_int("u_material.specular", 1);
+    obj_shader.set_int("u_material.emission", 2);
     obj_shader.set_float("u_material.shininess", 64.f);
 
     /* Setting light property */
@@ -144,7 +150,8 @@ void _12_LightingMap::main() {
         obj_shader,
         obj_model,
         diffuse_map,
-        specular_map
+        specular_map,
+        emission_map
     ] (WindowManager* context) {
         glClearColor(.1f, .1f, .1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -159,6 +166,7 @@ void _12_LightingMap::main() {
 
         diffuse_map.activate();
         specular_map.activate();
+        emission_map.activate();
 
         obj_model->reset();
         obj_model->translate(cos(glm::radians(context->get_time() * 30.0f)), .0f, .0f);
