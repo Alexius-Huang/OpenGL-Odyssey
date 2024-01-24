@@ -6,6 +6,56 @@ using std::stringstream;
 using std::cout;
 using std::endl;
 
+Shader Shader::from_source(const char* vertex_shader_code, const char* fragment_shader_code) {
+    // Compiling shaders...
+    int success;
+    char info_log[512];
+
+    unsigned int vertex_shader { glCreateShader(GL_VERTEX_SHADER) };
+    unsigned int fragment_shader { glCreateShader(GL_FRAGMENT_SHADER) };
+
+    // cout << "Compiling Vertex Shader ... " << endl;
+    // cout << vertex_shader_code << endl;
+    glShaderSource(vertex_shader, 1, &vertex_shader_code, NULL);
+    glCompileShader(vertex_shader);
+    glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(vertex_shader, 512, NULL, info_log);
+        cout << "ERROR::SHADER::VERTEX::COMPILATION_ERROR:" << endl << info_log << endl;
+    }
+
+    // cout << "Compiling Fragment Shader ... " << endl;
+    // cout << fragment_shader_code << endl;
+    glShaderSource(fragment_shader, 1, &fragment_shader_code, NULL);
+    glCompileShader(fragment_shader);
+    glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(fragment_shader, 512, NULL, info_log);
+        cout << "ERROR::SHADER::FRAGMENT::COMPILATION_ERROR:" << endl << info_log << endl;
+    }
+
+    return Shader { vertex_shader, fragment_shader };
+};
+
+Shader::Shader(unsigned int vertex_shader, unsigned int fragment_shader) {
+    this->ID = glCreateProgram();
+    glAttachShader(this->ID, vertex_shader);
+    glAttachShader(this->ID, fragment_shader);
+    glLinkProgram(this->ID);
+    
+    int success;
+    char info_log[512];
+
+    glGetProgramiv(this->ID, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(this->ID, 512, NULL, info_log);
+        cout << "ERROR::SHADER::PROGRAM::LINK_FAILED:" << endl << info_log << endl;
+    }
+
+    glDeleteShader(vertex_shader);
+    glDeleteShader(fragment_shader);
+}
+
 Shader::Shader(const char* vertex_shader_path, const char* fragment_shader_path) {
     string vertex_shader_string;
     string fragment_shader_string;
@@ -65,7 +115,7 @@ Shader::Shader(const char* vertex_shader_path, const char* fragment_shader_path)
     glAttachShader(this->ID, vertex_shader);
     glAttachShader(this->ID, fragment_shader);
     glLinkProgram(this->ID);
-    
+
     glGetProgramiv(this->ID, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(this->ID, 512, NULL, info_log);

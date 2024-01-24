@@ -8,6 +8,7 @@
 #include <map>
 #include <functional>
 #include <iostream>
+#include <Camera/Camera.h>
 
 using std::exception;
 using std::string;
@@ -38,7 +39,12 @@ class WindowManager {
 private:
     float width;
     float height;
+    float fov;
+    float near;
+    float far;
+    float aspect_ratio;
     GLFWwindow* window;
+    Camera* camera;
 
     float delta_time { .0f };
     float last_frame_time { .0f };
@@ -57,8 +63,26 @@ private:
     }
 
 public:
-    WindowManager(float width, float height)
-        : width { width }, height { height } {}
+    WindowManager(
+        float width,
+        float height,
+        float fov = 45.0f,
+        float near = .1f,
+        float far = 100.0f
+    ) : width { width },
+        height { height },
+        aspect_ratio { width / height },
+        fov { fov },
+        near { near },
+        far { far },
+        camera { nullptr }
+    {
+        this->camera = new Camera { width, height };
+    }
+
+    ~WindowManager() {
+        delete this->camera;
+    }
 
     GLFWwindow* init() {
         glfwInit();
@@ -92,6 +116,28 @@ public:
         return this->window;
     }
 
+    void setup_camera_events(GLFWcursorposfun mouse_callback, GLFWscrollfun scroll_callback) {
+        this->listen(GLFW_KEY_W, [] (WindowManager *context) {
+            Camera* camera = context->get_camera();
+            camera->set_position_y(camera->position.y + context->get_delta_time());
+        });
+        this->listen(GLFW_KEY_A, [] (WindowManager *context) {
+            Camera* camera = context->get_camera();
+            camera->set_position_x(camera->position.x - context->get_delta_time());
+        });
+        this->listen(GLFW_KEY_S, [] (WindowManager *context) {
+            Camera* camera = context->get_camera();
+            camera->set_position_y(camera->position.y - context->get_delta_time());
+        });
+        this->listen(GLFW_KEY_D, [] (WindowManager *context) {
+            Camera* camera = context->get_camera();
+            camera->set_position_x(camera->position.x + context->get_delta_time());
+        });
+
+        glfwSetCursorPosCallback(this->get_window(), mouse_callback);
+        glfwSetScrollCallback(this->get_window(), scroll_callback);
+    }
+
     // Handle window resize
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
         glViewport(0, 0, width, height);
@@ -107,7 +153,7 @@ public:
         while (!glfwWindowShouldClose(this->window)) {
             GLFWwindow* window { this->window };
 
-            float current_time { (float)glfwGetTime() };
+            float current_time { this->get_time() };
             this->delta_time = current_time - this->last_frame_time;
 
             this->execute_events();
@@ -121,8 +167,27 @@ public:
         }
     }
 
-    GLFWwindow* get_window() { return this->window; }
-    float get_delta_time() { return this->delta_time; }
+    GLFWwindow* get_window() const { return this->window; }
+    float get_delta_time() const { return this->delta_time; }
+    float get_time() const { return (float)glfwGetTime(); }
+    Camera* get_camera() const { return this->camera; }
+
+    glm::mat4 get_view_matrix() const {
+        return this->camera->derive_view_matrix().get_matrix();
+    }
+
+    glm::mat4 get_projection_matrix() const {
+        return glm::perspective(
+            glm::radians(this->fov),
+            this->aspect_ratio,
+            this->near,
+            this->far
+        );
+    }
+
+    void set_fov(float fov) {
+        this->fov = fov;
+    }
 };
 
 #endif

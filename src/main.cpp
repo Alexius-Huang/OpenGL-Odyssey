@@ -5,6 +5,8 @@
 #include "lessons/05-texture-basics/main.h"
 #include "lessons/06-transformation-basics/main.h"
 #include "lessons/07-3d-plane/main.h"
+#include "lessons/08-3d-cube/main.h"
+#include "lessons/09-camera-look-around/main.h"
 
 int main() {
     // _01_Introduction::main();
@@ -13,7 +15,17 @@ int main() {
     // _04_ShaderBasics::main();
     // _05_TextureBasics::main();
     // _06_TransformationBasics::main();
-    _07_3DPlane::main();
+    // _07_3DPlane::main();
+
+    // _08_3DCube_1_MultiPlaneDrawCall::main();
+    // _08_3DCube_2_SingleDrawCall::main();
+    // _08_3DCube_3_MultiCubes::main();
+    // _08_3DCube_4_UseAbstractCube::main();
+
+    // _09_1_LookAtMatrix::main();
+    // _09_2_MovingCamera::main();
+    // _09_3_PitchAndYaw::main();
+    _09_4_UseCameraClass::main();
 
     return 0;
 }

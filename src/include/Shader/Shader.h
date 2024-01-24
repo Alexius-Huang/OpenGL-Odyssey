@@ -14,8 +14,10 @@ using std::string;
 
 class Shader {
 public:
+    static Shader from_source(const char* vertex_shader_code, const char* fragment_shader_code);
     unsigned int ID;
 
+    Shader(unsigned int vertex_shader, unsigned int fragment_shader);
     Shader(const char* vertex_shader_path, const char* fragment_shader_path);
 
     // use/activate shader
