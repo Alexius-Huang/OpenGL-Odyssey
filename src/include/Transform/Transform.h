@@ -36,6 +36,10 @@ public:
         this->matrix = glm::transpose(this->matrix);
     }
 
+    void inverse() {
+        this->matrix = glm::inverse(this->matrix);
+    }
+
     void rotate(float degree, float x, float y, float z) {
         this->matrix = glm::rotate(this->matrix, glm::radians(degree), glm::vec3(x, y, z));
     }

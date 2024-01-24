@@ -28,7 +28,9 @@ int main() {
     // _09_3_PitchAndYaw::main();
     // _09_4_UseCameraClass::main();
 
-    _10_1_LightingColor::main();
+    // _10_1_LightingColor::main();
+    // _10_2_PhongLightingModel::main();
+    _10_3_PhongLightingModelInViewSpace::main();
 
     return 0;
 }

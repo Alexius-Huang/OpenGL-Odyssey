@@ -75,6 +75,8 @@ public:
         this->position.z = z;
     }
 
+    glm::vec3 get_position() { return this->position; }
+
     void process_cursor(double x, double y) {
         float x_offset = x - this->previous_x;
         float y_offset = -(y - this->previous_y); // y is from bottom to top!
