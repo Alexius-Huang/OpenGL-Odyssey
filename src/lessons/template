@@ -1,0 +1,52 @@
+#include <iostream>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <WindowManager/WindowManager.h>
+#include <Camera/Camera.h>
+
+namespace _TEMPLATE_ {
+    void main();
+    void mouse_callback(GLFWwindow* window, double x, double y);
+    void scroll_callback(GLFWwindow* window, double x_offset, double y_offset);
+
+    float width { 600 };
+    float height { 800 };
+    float *fov = new float { 45.0f };
+    const float ZOOM_MIN { 1.0f };
+    const float ZOOM_MAX { 75.0f };
+
+    WindowManager manager { width, height };
+    Camera* camera { manager.get_camera() };
+}
+
+void _TEMPLATE_::main() {
+    manager.init();
+    manager.setup_camera_events(mouse_callback, scroll_callback);
+ 
+    glEnable(GL_DEPTH_TEST);
+    manager.render([] (WindowManager* context) {
+        glClearColor(.1f, .1f, .1f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    });
+
+    /* Clean Up */
+    delete fov;
+    glfwTerminate();
+}
+
+
+void _TEMPLATE_::mouse_callback(GLFWwindow* window, double x, double y) {
+    camera->process_cursor(x, y);
+}
+
+void _TEMPLATE_::scroll_callback(GLFWwindow* window, double x_offset, double y_offset) {
+    *fov -= y_offset;
+    if (*fov < ZOOM_MIN) *fov = ZOOM_MIN;
+    else if (*fov > ZOOM_MAX) *fov = ZOOM_MAX;
+
+    manager.set_fov(*fov);
+}

@@ -8,6 +8,8 @@
 #include "lessons/08-3d-cube/main.h"
 #include "lessons/09-camera-look-around/main.h"
 #include "lessons/10-lighting/main.h"
+#include "lessons/11-materials/main.h"
+#include "lessons/12-lighting-maps/main.h"
 
 int main() {
     // _01_Introduction::main();
@@ -30,7 +32,13 @@ int main() {
 
     // _10_1_LightingColor::main();
     // _10_2_PhongLightingModel::main();
-    _10_3_PhongLightingModelInViewSpace::main();
+    // _10_3_PhongLightingModelInViewSpace::main();
+
+    // _11_1_MaterialProperty::main();
+    // _11_2_LightProperty::main();
+    // _11_3_SimulatingMaterial::main();
+
+    _12_LightingMap::main();
 
     return 0;
 }
