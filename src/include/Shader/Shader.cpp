@@ -158,3 +158,14 @@ void Shader::set_mat4(const string name, glm::mat4 matrix) const {
         glm::value_ptr(matrix)
     );
 }
+
+void Shader::set_coordinates(glm::mat4 model, glm::mat4 view, glm::mat4 projection) const {
+    this->set_mat4("model", model);
+    this->set_mat4("view", view);
+    this->set_mat4("projection", projection);
+}
+void Shader::set_coordinates(Transform model, Transform view, Transform projection) const {
+    this->set_mat4("model", model.get_matrix());
+    this->set_mat4("view", view.get_matrix());
+    this->set_mat4("projection", projection.get_matrix());
+}

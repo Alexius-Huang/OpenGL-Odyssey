@@ -145,4 +145,5 @@ unsigned int _08_3DCube_4_UseAbstractCube::generate_vertex_buffer_object(
 
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    return VBO;
 }

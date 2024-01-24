@@ -19,18 +19,18 @@ namespace _09_4_UseCameraClass {
     unsigned int generate_vertex_buffer_object(const float *vertices, size_t vertices_size);
     void mouse_callback(GLFWwindow* window, double x, double y);
     void scroll_callback(GLFWwindow* window, double x_offset, double y_offset);
+
+    float width { 800 };
+    float height { 600 };
+
+    // We change the value of fov in order to simulate zoom effect
+    float *fov = new float { 45.0f };
+    const float ZOOM_MIN { 1.0f };
+    const float ZOOM_MAX { 75.0f };
+
+    WindowManager manager { width, height };
+    Camera* camera { manager.get_camera() };
 }
-
-float width { 800 };
-float height { 600 };
-
-// We change the value of fov in order to simulate zoom effect
-float *fov = new float { 45.0f };
-const float ZOOM_MIN { 1.0f };
-const float ZOOM_MAX { 75.0f };
-
-WindowManager manager { width, height };
-Camera* camera { manager.get_camera() };
 
 void _09_4_UseCameraClass::main() {
     manager.init();
@@ -191,6 +191,7 @@ unsigned int _09_4_UseCameraClass::generate_vertex_buffer_object(
 
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    return VBO;
 }
 
 void _09_4_UseCameraClass::mouse_callback(GLFWwindow* window, double x, double y) {

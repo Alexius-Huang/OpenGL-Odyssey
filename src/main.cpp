@@ -7,6 +7,7 @@
 #include "lessons/07-3d-plane/main.h"
 #include "lessons/08-3d-cube/main.h"
 #include "lessons/09-camera-look-around/main.h"
+#include "lessons/10-lighting/main.h"
 
 int main() {
     // _01_Introduction::main();
@@ -25,7 +26,9 @@ int main() {
     // _09_1_LookAtMatrix::main();
     // _09_2_MovingCamera::main();
     // _09_3_PitchAndYaw::main();
-    _09_4_UseCameraClass::main();
+    // _09_4_UseCameraClass::main();
+
+    _10_1_LightingColor::main();
 
     return 0;
 }

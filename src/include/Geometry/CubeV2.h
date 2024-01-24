@@ -1,5 +1,5 @@
-#ifndef _GEOMETRY_CUBE_H_
-#define _GEOMETRY_CUBE_H_
+#ifndef _GEOMETRY_CUBE_V2_H_
+#define _GEOMETRY_CUBE_V2_H_
 
 #include <iostream>
 #include <glad/glad.h>
@@ -12,19 +12,15 @@
 #include "./Cube.const.h"
 
 namespace Geometry {
-    class Cube;
+    class CubeV2;
 }
 
-class Geometry::Cube {
+class Geometry::CubeV2 {
 private:
     unsigned int VAO;
-    Shader shader_program;
 
 public:
-    Cube(): shader_program { Shader {
-        "./shaders/Geometry/Cube/Cube.vs",
-        "./shaders/Geometry/Cube/Cube.fs"
-    } } {
+    CubeV2() {
         glGenVertexArrays(1, &(this->VAO));
         glBindVertexArray(this->VAO);
 
@@ -40,27 +36,9 @@ public:
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*) 0);
         glEnableVertexAttribArray(0);
-
-        this->shader_program.use();
-        this->shader_program.set_vec3("u_color", 1.0f, 1.0f, 1.0f);
-    }
-
-    void set_color(glm::vec3 color_vec) const {
-        this->shader_program.set_vec3("u_color", color_vec);
-    }
-    void set_color(float r, float g, float b) const {
-        this->shader_program.set_vec3("u_color", r, g, b);
-    }
-
-    void set_coordinate_system(glm::mat4 model, glm::mat4 view, glm::mat4 projection) const {
-        this->shader_program.set_mat4("model", model);
-        this->shader_program.set_mat4("view", view);
-        this->shader_program.set_mat4("projection", projection);
     }
 
     void render() const {
-        this->shader_program.use();
-
         glBindVertexArray(this->VAO);
         glDrawArrays(GL_TRIANGLES, 0, Geometry::CUBE_VERTICES_COUNT);
     }

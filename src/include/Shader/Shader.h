@@ -9,6 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <Transform/Transform.h>
 
 using std::string;
 
@@ -30,6 +31,9 @@ public:
     void set_vec3(const string name, float x, float y, float z) const;
     void set_vec3(const string name, glm::vec3 vector) const;
     void set_mat4(const string name, glm::mat4 matrix) const;
+
+    void set_coordinates(glm::mat4 model, glm::mat4 view, glm::mat4 projection) const;
+    void set_coordinates(Transform model, Transform view, Transform projection) const;
 };
 
 #endif

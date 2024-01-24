@@ -1,0 +1,1 @@
+#include "./lighting-color.h"
