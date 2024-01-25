@@ -150,6 +150,15 @@ void Shader::set_vec3(const string name, glm::vec3 vector) const {
     glUniform3f(glGetUniformLocation(this->ID, name.c_str()), vector.x, vector.y, vector.z);
 }
 
+void Shader::set_mat3(const string name, glm::mat3 matrix) const {
+    glUniformMatrix3fv(
+        glGetUniformLocation(this->ID, name.c_str()),
+        1,
+        GL_FALSE,
+        glm::value_ptr(matrix)
+    );
+}
+
 void Shader::set_mat4(const string name, glm::mat4 matrix) const {
     glUniformMatrix4fv(
         glGetUniformLocation(this->ID, name.c_str()),

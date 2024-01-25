@@ -30,6 +30,7 @@ public:
     void set_float(const string name, float value) const;
     void set_vec3(const string name, float x, float y, float z) const;
     void set_vec3(const string name, glm::vec3 vector) const;
+    void set_mat3(const string name, glm::mat3 matrix) const;
     void set_mat4(const string name, glm::mat4 matrix) const;
 
     void set_coordinates(glm::mat4 model, glm::mat4 view, glm::mat4 projection) const;

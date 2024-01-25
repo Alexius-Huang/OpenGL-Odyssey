@@ -76,6 +76,7 @@ public:
     }
 
     glm::vec3 get_position() { return this->position; }
+    glm::vec3 get_front_vector() { return this->derive_front(); }
 
     void process_cursor(double x, double y) {
         float x_offset = x - this->previous_x;

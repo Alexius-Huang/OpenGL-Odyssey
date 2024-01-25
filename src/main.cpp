@@ -10,6 +10,7 @@
 #include "lessons/10-lighting/main.h"
 #include "lessons/11-materials/main.h"
 #include "lessons/12-lighting-maps/main.h"
+#include "lessons/13-light-casters/main.h"
 
 int main() {
     // _01_Introduction::main();
@@ -38,7 +39,12 @@ int main() {
     // _11_2_LightProperty::main();
     // _11_3_SimulatingMaterial::main();
 
-    _12_LightingMap::main();
+    // _12_LightingMap::main();
+
+    // _13_1_DirectionalLight::main();
+    // _13_2_PointLight::main();
+    // _13_3_SpotLight::main();
+    _13_4_SpotLightSoftEdge::main();
 
     return 0;
 }
