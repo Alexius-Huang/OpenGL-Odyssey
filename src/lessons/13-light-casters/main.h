@@ -2,3 +2,4 @@
 #include "./point-light.h"
 #include "./spot-light.h"
 #include "./spot-light-soft-edge.h"
+#include "./multi-light-scene.h"

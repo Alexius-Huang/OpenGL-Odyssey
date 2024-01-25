@@ -44,7 +44,8 @@ int main() {
     // _13_1_DirectionalLight::main();
     // _13_2_PointLight::main();
     // _13_3_SpotLight::main();
-    _13_4_SpotLightSoftEdge::main();
+    // _13_4_SpotLightSoftEdge::main();
+    _13_5_MultiLightScene::main();
 
     return 0;
 }
